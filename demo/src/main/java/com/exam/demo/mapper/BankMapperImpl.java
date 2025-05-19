@@ -56,5 +56,34 @@ public class BankMapperImpl {
         return remboursement;
     }
 
+    // List Mappings
+    public List<ClientDTO> fromClientList(List<Client> clients) {
+        return clients.stream()
+                .map(this::fromClient)
+                .collect(Collectors.toList());
+    }
 
-} 
+    public List<CreditDTO> fromCreditList(List<Credit> credits) {
+        return credits.stream()
+                .map(this::fromCredit)
+                .collect(Collectors.toList());
+    }
+
+    public List<RemboursementDTO> fromRemboursementList(List<Remboursement> remboursements) {
+        return remboursements.stream()
+                .map(this::fromRemboursement)
+                .collect(Collectors.toList());
+    }
+
+    public CreditDTO fromCredit(Credit credit) {
+        CreditDTO creditDTO;
+        if (credit instanceof CreditPersonnel) {
+            creditDTO = fromCreditPersonnl((CreditPersonnel) credit);
+        } else if (credit instanceof CreditImmobilier) {
+            creditDTO = fromCreditImmobilier((CreditImmobilier) credit);
+        } else {
+            creditDTO = fromCreditProfessionnel((CreditProfessionnel) credit);
+        }
+        return creditDTO;
+    }
+}
